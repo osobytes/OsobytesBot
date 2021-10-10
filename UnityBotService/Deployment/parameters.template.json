@@ -30,10 +30,10 @@
             "value": "osobytes.azurecr.io"
         },
         "imageUsername": {
-            "value": "osobytes"
+            "value": "{REGISTRY_USERNAME}"
         },
         "imagePassword": {
-            "value": "{ACR_PASSWORD}"
+            "value": "{REGISTRY_PASSWORD}"
         },
         "ipAddressType": {
             "value": "Private"

@@ -53,7 +53,8 @@ jobs:
           uses: actions/checkout@main
         - run: |
             cp 'parameters.template.json' 'parameters.json'
-            sed -i "s/{ACR_PASSWORD}/${{ secrets.ACR_PASSWORD }}/g" parameters.json
+            sed -i "s/{REGISTRY_USERNAME}/${{ secrets.REGISTRY_USERNAME }}/g" parameters.json
+            sed -i "s/{REGISTRY_PASSWORD}/${{ secrets.REGISTRY_PASSWORD }}/g" parameters.json
             sed -i "s/{IMAGE_VERSION}/${{ github.sha }}/g" parameters.json
             cp 'template.template.json' 'template.json'
             sed -i "s/{TWITTER_APIKEY}/$(echo ${{ secrets.TWITTER_APIKEY }} | base64)/g" template.json
