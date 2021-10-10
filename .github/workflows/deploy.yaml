@@ -89,6 +89,7 @@ jobs:
           with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
         - name: 'Deploy to Azure Container Instances'
-          uses: 'azure/cli@1.0.4'
-          with:
-            inlineScript: 'az deployment group create -g ${{ secrets.RESOURCE_GROUP }} -f ${{ runner.temp }}/template.json -p ${{ runner.temp }}/parameters.json'
+          env:
+            RESOURCE_GROUP: ${{ secrets.RESOURCE_GROUP }}
+          run: |
+            az deployment group create -g $RESOURCE_GROUP -f ${{ runner.temp }}/template.json -p ${{ runner.temp }}/parameters.json
