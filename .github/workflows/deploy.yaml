@@ -57,11 +57,11 @@ jobs:
             sed -i "s/{REGISTRY_PASSWORD}/${{ secrets.REGISTRY_PASSWORD }}/g" parameters.json
             sed -i "s/{IMAGE_VERSION}/${{ github.sha }}/g" parameters.json
             cp 'template.template.json' 'template.json'
-            encodedApiKey=$(${{ secrets.TWITTER_APIKEY }} | base64)
-            encodedApiSecret=$(${{ secrets.TWITTER_APISECRET }} | base64)
-            encodedAccessToken=$(${{ secrets.TWITTER_ACCESSTOKEN }} | base64)
-            encodedAccessTokenSecret=$(${{ secrets.TWITTER_ACCESSTOKENSECRET }} | base64)
-            encodedBearerToken=$(${{ secrets.TWITTER_BEARERTOKEN }} | base64)
+            encodedApiKey=$(echo ${{ secrets.TWITTER_APIKEY }} | base64)
+            encodedApiSecret=$(echo ${{ secrets.TWITTER_APISECRET }} | base64)
+            encodedAccessToken=$(echo ${{ secrets.TWITTER_ACCESSTOKEN }} | base64)
+            encodedAccessTokenSecret=$(echo ${{ secrets.TWITTER_ACCESSTOKENSECRET }} | base64)
+            encodedBearerToken=$(echo ${{ secrets.TWITTER_BEARERTOKEN }} | base64)
             sed -i "s/{TWITTER_APIKEY}/${encodedApiKey}/g" template.json
             sed -i "s/{TWITTER_APISECRET}/${encodedApiSecret}/g" template.json
             sed -i "s/{TWITTER_ACCESSTOKEN}/${encodedAccessToken}/g" template.json
