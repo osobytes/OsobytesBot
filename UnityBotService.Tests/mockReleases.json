@@ -1,0 +1,36 @@
+{
+  "2021": [
+    {
+      "ReleaseDate": "15/09/2021",
+      "Version": "Unity 2021.1.21",
+      "UnityVersion": "2021"
+    },
+    {
+      "ReleaseDate": "15/08/2021",
+      "Version": "Unity 2021.08.21",
+      "UnityVersion": "2021"
+    },
+    {
+      "ReleaseDate": "01/07/2021",
+      "Version": "Unity 2021.07.21",
+      "UnityVersion": "2021"
+    }
+  ],
+  "2019": [
+    {
+      "ReleaseDate": "15/09/2019",
+      "Version": "Unity 2021.1.19",
+      "UnityVersion": "2021"
+    },
+    {
+      "ReleaseDate": "01/01/2019",
+      "Version": "Unity 2021.1.21",
+      "UnityVersion": "2021"
+    },
+    {
+      "ReleaseDate": "15/09/2021",
+      "Version": "Unity 2021.1.21",
+      "UnityVersion": "2021"
+    }
+  ]
+}
