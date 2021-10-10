@@ -31,8 +31,6 @@ namespace UnityBotService.Credentials
             var accessTokenSecret = await this.SecretClient.GetSecretAsync(TwitterAccessSecretName);
             var bearerToken = await this.SecretClient.GetSecretAsync(TwitterBearerTokenName);
             var creds = new TwitterCredentials(consumerKey, consumerSecret, accessToken, accessTokenSecret, bearerToken);
-            var jsonCreds = JsonConvert.SerializeObject(creds);
-            this.Logger.LogInformation("Credentials obtained: {jsonCreds}", jsonCreds);
             ValidateTwitterCredentials(creds);
             return creds;
         }
