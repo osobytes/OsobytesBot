@@ -53,9 +53,9 @@ jobs:
           uses: actions/checkout@main
         - name: Create parameters file
           env:
-            REG_UNAME: {{ secrets.REGISTRY_USERNAME }}
-            REG_PWD: {{ secrets.REGISTRY_PASSWORD }}
-            IMAGE_VERSION: {{ github.sha }}
+            REG_UNAME: ${{ secrets.REGISTRY_USERNAME }}
+            REG_PWD: ${{ secrets.REGISTRY_PASSWORD }}
+            IMAGE_VERSION: ${{ github.sha }}
           run: |
             awk -v registryUsername="$REG_UNAME" -v registryPassword="$REG_PWD" -v imageVersion="$IMAGE_VERSION" '{
               sub(/{REGISTRY_USERNAME}/, registryUsername);
