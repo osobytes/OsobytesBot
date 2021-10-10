@@ -1,0 +1,41 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Build Docker container, Push to ACR and Deploy to Azure Container Instance.
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+    build-and-deploy:
+        runs-on: ubuntu-latest
+        steps:
+        # checkout the repo
+        - name: 'Checkout GitHub Action'
+          uses: actions/checkout@main
+          
+        - name: 'Login via Azure CLI'
+          uses: azure/login@v1
+          with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+        - name: 'Build and push image'
+          uses: azure/docker-login@v1
+          with:
+            login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+            username: ${{ secrets.REGISTRY_USERNAME }}
+            password: ${{ secrets.REGISTRY_PASSWORD }}
+        - run: |
+            docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/unitybotservice:${{ github.sha }}
+            docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/unitybotservice:${{ github.sha }}
+        - run: |
+            ${{ github.workspace }}/UnityBotService/Deployment/prepare_secrets.sh ${{ secrets.ACR_PASSWORD }} ${{ secrets.TWITTER_APIKEY }} ${{ secrets.TWITTER_APISECRET }} ${{ secrets.TWITTER_ACCESSTOKEN }} ${{ secrets.TWITTER_ACCESSTOKENSECRET }} ${{ secrets.TWITTER_BEARERTOKEN }} ${{ github.sha }}
+        - name: 'Deploy to Azure Container Instances'
+          uses: 'azure/cli@1.0.4'
+          with:
+            inlineScript: 'deployment group create -g ${{ secrets.RESOURCE_GROUP }} -f ${{ github.workspace }}/UnityBotService/Deployment/template.json -p ${{ github.workspace }}/UnityBotService/Deployment/parameters.json'

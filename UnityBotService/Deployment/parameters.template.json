@@ -12,7 +12,7 @@
             "value": "Private"
         },
         "imageName": {
-            "value": "osobytes.azurecr.io/unitybotservice:latest"
+            "value": "osobytes.azurecr.io/unitybotservice:{IMAGE_VERSION}"
         },
         "osType": {
             "value": "Linux"
