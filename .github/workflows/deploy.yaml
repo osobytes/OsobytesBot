@@ -52,21 +52,27 @@ jobs:
         - name: 'Checkout GitHub Action'
           uses: actions/checkout@main
         - run: |
-            cp 'parameters.template.json' 'parameters.json'
-            sed -i "s/{REGISTRY_USERNAME}/${{ secrets.REGISTRY_USERNAME }}/g" parameters.json
-            sed -i "s/{REGISTRY_PASSWORD}/${{ secrets.REGISTRY_PASSWORD }}/g" parameters.json
-            sed -i "s/{IMAGE_VERSION}/${{ github.sha }}/g" parameters.json
-            cp 'template.template.json' 'template.json'
+            awk -v registryUsername=${{ secrets.REGISTRY_USERNAME }} -v registryPassword=${{ secrets.REGISTRY_PASSWORD }} -v imageVersion=${{ github.sha }} '{
+              sub(/{REGISTRY_USERNAME}/, registryUsername);
+              sub(/{REGISTRY_PASSWORD}/, registryPassword);
+              sub(/{IMAGE_VERSION}/, imageVersion);
+              print;
+            }' parameters.template.json > parameters.json
+        - run: |
             encodedApiKey=$(echo ${{ secrets.TWITTER_APIKEY }} | base64)
             encodedApiSecret=$(echo ${{ secrets.TWITTER_APISECRET }} | base64)
             encodedAccessToken=$(echo ${{ secrets.TWITTER_ACCESSTOKEN }} | base64)
             encodedAccessTokenSecret=$(echo ${{ secrets.TWITTER_ACCESSTOKENSECRET }} | base64)
             encodedBearerToken=$(echo ${{ secrets.TWITTER_BEARERTOKEN }} | base64)
-            sed -i "s/{TWITTER_APIKEY}/${encodedApiKey}/g" template.json
-            sed -i "s/{TWITTER_APISECRET}/${encodedApiSecret}/g" template.json
-            sed -i "s/{TWITTER_ACCESSTOKEN}/${encodedAccessToken}/g" template.json
-            sed -i "s/{TWITTER_ACCESSTOKENSECRET}/${encodedAccessTokenSecret}/g" template.json
-            sed -i "s/{TWITTER_BEARERTOKEN}/${encodedBearerToken}/g" template.json
+            awk -v encodedApiKey=$encodedApiKey -v encodedApiSecret=$encodedApiSecret -v encodedAccessToken=$encodedAccessToken -v encodedAccessTokenSecret=$encodedAccessTokenSecret -v encodedBearerToken=$encodedBearerToken '{
+              sub(/{TWITTER_APIKEY}/, encodedApiKey);
+              sub(/{TWITTER_APISECRET}/, encodedApiSecret);
+              sub(/{TWITTER_ACCESSTOKEN}/, encodedAccessToken);
+              sub(/{TWITTER_ACCESSTOKENSECRET}/, encodedAccessTokenSecret);
+              sub(/{TWITTER_BEARERTOKEN}/, encodedBearerToken);
+              print;
+            }' template.template.json > template.json
+
         # - name: 'Deploy to Azure Container Instances'
         #  uses: 'azure/cli@1.0.4'
         #  with:
