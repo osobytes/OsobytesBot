@@ -24,8 +24,8 @@ jobs:
             dotnet-version: 5.0.x
         - name: Restore dotnet dependencies
           run: dotnet restore
-        - name: Build
-          run: Build dotnet projects
+        - name: Build dotnet projects
+          run: dotnet build
         - name: Run unit tests
           run: dotnet test
         - name: 'Login via Azure CLI'
