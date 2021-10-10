@@ -6,8 +6,8 @@ namespace UnityBotService.Unity
 {
     public class UnityArchive
     {
-        public IDictionary<string, IReadOnlyList<UnityRelease>> Releases { get; private set; }
-        public IReadOnlyList<string> UnityVersions { get; private set; }
+        public virtual IDictionary<string, IReadOnlyList<UnityRelease>> Releases { get; protected set; }
+        public virtual IReadOnlyList<string> UnityVersions { get; protected set; }
         public UnityArchive(IDictionary<string, IReadOnlyList<UnityRelease>> releases)
         {
             Releases = releases;

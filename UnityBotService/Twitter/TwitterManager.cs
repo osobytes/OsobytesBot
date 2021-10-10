@@ -23,6 +23,25 @@ namespace UnityBotService.Twitter
                 if (!alreadyTweeted)
                 {
                     var tweet = await Twitter.PublishTweetAsync($"A new version of Unity ({release.Version}) is Available.");
+                    Logger.LogInformation("I just tweeted a brand new version release.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError($"tweet_send_error", ex.ToString());
+            }
+        }
+
+        public async Task TweetUnityReleaseAnniversary(UnityRelease release, int yearDiff)
+        {
+            try
+            {
+                var tweetText = $"A day like today {yearDiff} years ago, Unity released version {release.Version} for Unity {release.UnityVersion}";
+                var alreadyTweeted = await Twitter.IncludedInRecentTweetsAsync(tweetText);
+                if (!alreadyTweeted)
+                {
+                    var tweet = await Twitter.PublishTweetAsync(tweetText);
+                    Logger.LogInformation("I just tweeted an anniversary release.");
                 }
             }
             catch (Exception ex)

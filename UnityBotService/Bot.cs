@@ -1,6 +1,8 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityBotService.Twitter;
@@ -23,12 +25,10 @@ namespace UnityBotService
             this.Application = app;
         }
 
-        public async Task TweetIfUnityReleasedTodayAsync()
+        public async Task TweetIfUnityReleasedTodayAsync(UnityArchive archive)
         {
             try
             {
-                var archive = await Archive.ReadLatestArchiveAsync();
-
                 if (archive == null)
                 {
                     throw new ArgumentNullException("archive", "Archive fetch returned null");
@@ -41,6 +41,55 @@ namespace UnityBotService
                     await Twitter.TweetNewUnityReleaseAsync(latest);
                 }
             }catch(Exception ex)
+            {
+                Logger.LogError("tweet_if_unity_released_today_error", ex.ToString());
+            }
+        }
+
+        public async Task TweetIfUnityReleaseAniversary(UnityArchive archive)
+        {
+            try
+            {
+                if (archive == null)
+                {
+                    throw new ArgumentNullException("archive", "Archive fetch returned null");
+                }
+                var today = DateTime.Now.Date;
+                var anniversaryReleases = new List<UnityRelease>();
+
+                foreach (var key in archive.UnityVersions)
+                {
+                    var versionReleases = archive.Releases[key];
+                    foreach(var release in versionReleases)
+                    {
+                        if(release.ReleaseDate.Month == today.Month && release.ReleaseDate.Day == today.Day)
+                        {
+                            anniversaryReleases.Add(release);
+                        }
+                    }
+                }
+
+                if(anniversaryReleases.Count == 0)
+                {
+                    this.Logger.LogInformation("no anniversaries found today.");
+                    return;
+                }
+                
+                foreach(var anniversary in anniversaryReleases)
+                {
+                    var yearDiff = (today.Year - anniversary.ReleaseDate.Year);
+                    if(yearDiff <= 0)
+                    {
+                        continue;
+                    }
+                    await Twitter.TweetUnityReleaseAnniversary(anniversary, yearDiff);
+                    
+                    // Wait in between each tweet.
+                    await Task.Delay(1000);
+                }
+
+            }
+            catch (Exception ex)
             {
                 Logger.LogError("tweet_if_unity_released_today_error", ex.ToString());
             }
@@ -61,7 +110,9 @@ namespace UnityBotService
             while (!stoppingToken.IsCancellationRequested)
             {
                 Logger.LogInformation("Unity Bot run archive check: {time}", DateTimeOffset.Now);
-                await TweetIfUnityReleasedTodayAsync();
+                var archive = await Archive.ReadLatestArchiveAsync();
+                await TweetIfUnityReleasedTodayAsync(archive);
+                await TweetIfUnityReleaseAniversary(archive);
                 await Task.Delay(IntervalDelay, stoppingToken);
             }
         }
