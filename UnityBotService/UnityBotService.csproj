@@ -16,4 +16,9 @@
   <ItemGroup>
     <Folder Include="Deployment\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="Deployment\prepare_secrets.sh">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
