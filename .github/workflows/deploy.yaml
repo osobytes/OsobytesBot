@@ -12,37 +12,37 @@ on:
   workflow_dispatch:
 
 jobs:
-    #build-and-push:
-    #    runs-on: ubuntu-latest
-    #    steps:
-    #    # checkout the repo
-    #    - name: 'Checkout GitHub Action'
-    #      uses: actions/checkout@main
-    #    - name: Setup .NET
-    #      uses: actions/setup-dotnet@v1
-    #      with:
-    #        dotnet-version: 5.0.x
-    #    - name: Restore dotnet dependencies
-    #      run: dotnet restore
-    #    - name: Build dotnet projects
-    #      run: dotnet build
-    #    - name: Run unit tests
-    #      run: dotnet test
-    #    - name: 'Login via Azure CLI'
-    #      uses: azure/login@v1
-    #      with:
-    #        creds: ${{ secrets.AZURE_CREDENTIALS }}
-    #    - name: 'Build and push image'
-    #      uses: azure/docker-login@v1
-    #      with:
-    #        login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-    #        username: ${{ secrets.REGISTRY_USERNAME }}
-    #        password: ${{ secrets.REGISTRY_PASSWORD }}
-    #    - run: |
-    #        docker build -f ${{ github.workspace }}/UnityBotService/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/unitybotservice:${{ github.sha }} .
-    #        docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/unitybotservice:${{ github.sha }}
+    build-and-push:
+        runs-on: ubuntu-latest
+        steps:
+        # checkout the repo
+        - name: 'Checkout GitHub Action'
+          uses: actions/checkout@main
+        - name: Setup .NET
+          uses: actions/setup-dotnet@v1
+          with:
+            dotnet-version: 5.0.x
+        - name: Restore dotnet dependencies
+          run: dotnet restore
+        - name: Build dotnet projects
+          run: dotnet build
+        - name: Run unit tests
+          run: dotnet test
+        - name: 'Login via Azure CLI'
+          uses: azure/login@v1
+          with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+        - name: 'Build and push image'
+          uses: azure/docker-login@v1
+          with:
+            login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+            username: ${{ secrets.REGISTRY_USERNAME }}
+            password: ${{ secrets.REGISTRY_PASSWORD }}
+        - run: |
+            docker build -f ${{ github.workspace }}/UnityBotService/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/unitybotservice:${{ github.sha }} .
+            docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/unitybotservice:${{ github.sha }}
     deploy-to-container-instance:
-        # needs: build-and-push
+        needs: build-and-push
         runs-on: ubuntu-latest
         defaults:
           run:
@@ -73,7 +73,7 @@ jobs:
               print;
             }' template.template.json > template.json
 
-        # - name: 'Deploy to Azure Container Instances'
-        #  uses: 'azure/cli@1.0.4'
-        #  with:
-        #    inlineScript: 'deployment group create -g ${{ secrets.RESOURCE_GROUP }} -f ${{ github.workspace }}/UnityBotService/Deployment/template.json -p ${{ github.workspace }}/UnityBotService/Deployment/parameters.json'
+        - name: 'Deploy to Azure Container Instances'
+          uses: 'azure/cli@1.0.4'
+          with:
+            inlineScript: 'deployment group create -g ${{ secrets.RESOURCE_GROUP }} -f ${{ github.workspace }}/UnityBotService/Deployment/template.json -p ${{ github.workspace }}/UnityBotService/Deployment/parameters.json'
