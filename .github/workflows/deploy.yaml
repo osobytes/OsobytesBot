@@ -52,7 +52,7 @@ jobs:
           uses: actions/checkout@main
         - run: |
             chmod +x prepare_secrets.sh |
-            prepare_secrets.sh ${{ secrets.ACR_PASSWORD }} ${{ secrets.TWITTER_APIKEY }} ${{ secrets.TWITTER_APISECRET }} ${{ secrets.TWITTER_ACCESSTOKEN }} ${{ secrets.TWITTER_ACCESSTOKENSECRET }} ${{ secrets.TWITTER_BEARERTOKEN }} ${{ github.sha }}
+            ./prepare_secrets.sh ${{ secrets.ACR_PASSWORD }} ${{ secrets.TWITTER_APIKEY }} ${{ secrets.TWITTER_APISECRET }} ${{ secrets.TWITTER_ACCESSTOKEN }} ${{ secrets.TWITTER_ACCESSTOKENSECRET }} ${{ secrets.TWITTER_BEARERTOKEN }} ${{ github.sha }}
         - name: 'Deploy to Azure Container Instances'
           uses: 'azure/cli@1.0.4'
           with:
