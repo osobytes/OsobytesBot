@@ -72,8 +72,11 @@ jobs:
               sub(/{TWITTER_BEARERTOKEN}/, encodedBearerToken);
               print;
             }' template.template.json > template.json
-
+        - name: 'Login via Azure CLI'
+          uses: azure/login@v1
+          with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
         - name: 'Deploy to Azure Container Instances'
           uses: 'azure/cli@1.0.4'
           with:
-            inlineScript: 'deployment group create -g ${{ secrets.RESOURCE_GROUP }} -f ${{ github.workspace }}/UnityBotService/Deployment/template.json -p ${{ github.workspace }}/UnityBotService/Deployment/parameters.json'
+            inlineScript: 'az deployment group create -g ${{ secrets.RESOURCE_GROUP }} -f ${{ github.workspace }}/UnityBotService/Deployment/template.json -p ${{ github.workspace }}/UnityBotService/Deployment/parameters.json'
