@@ -64,7 +64,7 @@ jobs:
             encodedAccessToken=$(echo ${{ secrets.TWITTER_ACCESSTOKEN }} | base64)
             encodedAccessTokenSecret=$(echo ${{ secrets.TWITTER_ACCESSTOKENSECRET }} | base64)
             encodedBearerToken=$(echo ${{ secrets.TWITTER_BEARERTOKEN }} | base64)
-            awk -v encodedApiKey=$encodedApiKey -v encodedApiSecret=$encodedApiSecret -v encodedAccessToken=$encodedAccessToken -v encodedAccessTokenSecret=$encodedAccessTokenSecret -v encodedBearerToken=$encodedBearerToken '{
+            awk -v encodedApiKey="$encodedApiKey" -v encodedApiSecret="$encodedApiSecret" -v encodedAccessToken="$encodedAccessToken" -v encodedAccessTokenSecret="$encodedAccessTokenSecret" -v encodedBearerToken="$encodedBearerToken" '{
               sub(/{TWITTER_APIKEY}/, encodedApiKey);
               sub(/{TWITTER_APISECRET}/, encodedApiSecret);
               sub(/{TWITTER_ACCESSTOKEN}/, encodedAccessToken);
