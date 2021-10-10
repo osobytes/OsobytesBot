@@ -46,7 +46,8 @@ namespace UnityBotService.Twitter
             }
             catch (Exception ex)
             {
-                Logger.LogError($"tweet_send_error", ex.ToString());
+                var error = ex.ToString();
+                Logger.LogError("tweet_send_error: {error}", error);
             }
         }
 
