@@ -52,8 +52,15 @@ jobs:
         - name: 'Checkout GitHub Action'
           uses: actions/checkout@main
         - run: |
-            chmod +x prepare_secrets.sh |
-            ./prepare_secrets.sh ${{ secrets.ACR_PASSWORD }} ${{ secrets.TWITTER_APIKEY }} ${{ secrets.TWITTER_APISECRET }} ${{ secrets.TWITTER_ACCESSTOKEN }} ${{ secrets.TWITTER_ACCESSTOKENSECRET }} ${{ secrets.TWITTER_BEARERTOKEN }} ${{ github.sha }}
+            cp 'parameters.template.json' 'parameters.json'
+            sed -i "s/{ACR_PASSWORD}/${{ secrets.ACR_PASSWORD }}/g" parameters.json
+            sed -i "s/{IMAGE_VERSION}/${{ github.sha }}/g" parameters.json
+            cp 'template.template.json' 'template.json'
+            sed -i "s/{TWITTER_APIKEY}/$(echo ${{ secrets.TWITTER_APIKEY }} | base64)/g" template.json
+            sed -i "s/{TWITTER_APISECRET}/$(echo ${{ secrets.TWITTER_APISECRET }} | base64)/g" template.json
+            sed -i "s/{TWITTER_ACCESSTOKEN}/$(echo ${{ secrets.TWITTER_ACCESSTOKEN }} | base64)/g" template.json
+            sed -i "s/{TWITTER_ACCESSTOKENSECRET}/$(echo ${{ secrets.TWITTER_ACCESSTOKENSECRET }} | base64)/g" template.json
+            sed -i "s/{TWITTER_BEARERTOKEN}/$(echo ${{ secrets.TWITTER_BEARERTOKEN }} | base64)/g" template.json
         - name: 'Deploy to Azure Container Instances'
           uses: 'azure/cli@1.0.4'
           with:
