@@ -5,8 +5,8 @@ WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
-COPY ["UnityBotService/UnityBotService.csproj", "UnityBotService/"]
-RUN dotnet restore "UnityBotService/UnityBotService.csproj"
+COPY ["UnityBotService.csproj", "UnityBotService/"]
+RUN dotnet restore "UnityBotService.csproj"
 COPY . .
 WORKDIR "/src/UnityBotService"
 RUN dotnet build "UnityBotService.csproj" -c Release -o /app/build
