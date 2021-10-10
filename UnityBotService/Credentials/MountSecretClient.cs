@@ -13,7 +13,8 @@ namespace UnityBotService.Credentials
             {
                 return null;
             }
-            return await File.ReadAllTextAsync(path);
+            var secretValue = await File.ReadAllTextAsync(path);
+            return secretValue.Trim();
         }
     }
 }
