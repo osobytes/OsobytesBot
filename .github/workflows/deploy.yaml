@@ -39,7 +39,7 @@ jobs:
             username: ${{ secrets.REGISTRY_USERNAME }}
             password: ${{ secrets.REGISTRY_PASSWORD }}
         - run: |
-            docker build ${{ github.workspace }}/UnityBotService -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/unitybotservice:${{ github.sha }}
+            docker build -f ${{ github.workspace }}/UnityBotService/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/unitybotservice:${{ github.sha }} .
             docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/unitybotservice:${{ github.sha }}
         - run: |
             ${{ github.workspace }}/UnityBotService/Deployment/prepare_secrets.sh ${{ secrets.ACR_PASSWORD }} ${{ secrets.TWITTER_APIKEY }} ${{ secrets.TWITTER_APISECRET }} ${{ secrets.TWITTER_ACCESSTOKEN }} ${{ secrets.TWITTER_ACCESSTOKENSECRET }} ${{ secrets.TWITTER_BEARERTOKEN }} ${{ github.sha }}
