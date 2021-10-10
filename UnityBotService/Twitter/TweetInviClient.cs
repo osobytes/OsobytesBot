@@ -58,10 +58,10 @@ namespace UnityBotService.Twitter
             return tweetItem.IdStr;
         }
 
-        public async Task<string> GetConnectedUserNameAsync()
+        public async Task<string> GetConnectedUserScreenNameAsync()
         {
             var user = await GetAccount();
-            return user.Name;
+            return user.ScreenName;
         }
     }
 }

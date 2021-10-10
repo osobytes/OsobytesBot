@@ -52,7 +52,7 @@ namespace UnityBotService.Twitter
 
         public async Task VerifyConnection()
         {
-            var user = await Twitter.GetConnectedUserNameAsync();
+            var user = await Twitter.GetConnectedUserScreenNameAsync();
             if (string.IsNullOrWhiteSpace(user))
             {
                 throw new Exception("Could not fetch connected user from twitter client.");

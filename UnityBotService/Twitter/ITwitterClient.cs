@@ -6,6 +6,6 @@ namespace UnityBotService.Twitter
     {
         Task<bool> IncludedInRecentTweetsAsync(string query);
         Task<string> PublishTweetAsync(string tweet);
-        Task<string> GetConnectedUserNameAsync();
+        Task<string> GetConnectedUserScreenNameAsync();
     }
 }
