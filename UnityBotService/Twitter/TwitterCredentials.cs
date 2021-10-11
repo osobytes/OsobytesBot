@@ -1,6 +1,8 @@
-﻿namespace UnityBotService.Twitter
+﻿using Tweetinvi.Models;
+
+namespace UnityBotService.Twitter
 {
-    public class TwitterCredentials
+    public class TwitterCredentials : IReadOnlyTwitterCredentials
     {
         public TwitterCredentials(string consumerKey, string consumerSecret, string accessToken, string accessTokenSecret, string bearerToken)
         {

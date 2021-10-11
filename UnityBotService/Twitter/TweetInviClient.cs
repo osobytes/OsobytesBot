@@ -7,32 +7,28 @@ namespace UnityBotService.Twitter
 {
     public class TweetInviClient : ITwitterClient
     {
-        private IAuthenticatedUser BotAccount;
+        private TwitterClient TwitterClient;
         private readonly ICredentialManager CredentialManager;
-        private TwitterCredentials Credentials;
         public TweetInviClient(ICredentialManager credentials)
         {
             CredentialManager = credentials;
         }
 
-        private async Task<TwitterCredentials> GetCredentials()
+        private async Task<TwitterClient> GetTwitterClientAsync()
         {
-            if(Credentials == null)
+            if(TwitterClient == null)
             {
-                Credentials = await CredentialManager.GetTwitterCredentialsAsync();
+                var credentials = await CredentialManager.GetTwitterCredentialsAsync();
+                TwitterClient = new TwitterClient(credentials);
             }
-            return Credentials;
+
+            return TwitterClient;
         }
 
         private async Task<IAuthenticatedUser> GetUserAsync()
         {
-            if(BotAccount == null)
-            {
-                var credentials = await GetCredentials();
-                var client = new TwitterClient(new InviCredentials(credentials));
-                BotAccount = await client.Users.GetAuthenticatedUserAsync();
-            }
-            return BotAccount;
+            var client = await GetTwitterClientAsync();
+            return await client.Users.GetAuthenticatedUserAsync();
         }
 
         public async Task<ITweet[]> GetUserTimelineAsync()
@@ -56,8 +52,8 @@ namespace UnityBotService.Twitter
 
         public async Task<string> PublishTweetAsync(string tweet)
         {
-            var account = await GetUserAsync();
-            var tweetItem = await account.Client.Tweets.PublishTweetAsync(tweet);
+            var client = await GetTwitterClientAsync();
+            var tweetItem = await client.Tweets.PublishTweetAsync(tweet);
             return tweetItem.IdStr;
         }
 
@@ -66,26 +62,5 @@ namespace UnityBotService.Twitter
             var user = await GetUserAsync();
             return user.ScreenName;
         }
-    }
-
-    public class InviCredentials : IReadOnlyTwitterCredentials
-    {
-        public InviCredentials(TwitterCredentials credentials)
-        {
-            AccessToken = credentials.AccessToken;
-            AccessTokenSecret = credentials.AccessTokenSecret;
-            BearerToken = credentials.BearerToken;
-            ConsumerKey = credentials.ConsumerKey;
-            ConsumerSecret = credentials.ConsumerSecret;
-        }
-        public string AccessToken { get; private set; }
-
-        public string AccessTokenSecret { get; private set; }
-
-        public string BearerToken { get; private set; }
-
-        public string ConsumerKey { get; private set; }
-
-        public string ConsumerSecret { get; private set; }
     }
 }
