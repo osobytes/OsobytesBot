@@ -51,5 +51,18 @@ namespace UnityUpdateTweetBot.Tests
             await twitter.TweetNewUnityReleaseAsync(release);
             client.Verify(c => c.PublishTweetAsync(It.IsAny<string>()), Times.Never());
         }
+
+        [Fact]
+        public async void TwitterManagerTests_MessagesShouldNotExceed140Chars()
+        {
+            var maxVersionlEngth = 10;
+
+            foreach(var message in TwitterManager.Messages)
+            {
+                var r = message.Replace("{0}", "");
+                r = $"{r} #Unity3d";
+                Assert.True(r.Length + maxVersionlEngth <= 140);
+            }
+        }
     }
 }

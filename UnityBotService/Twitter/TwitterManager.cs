@@ -22,8 +22,13 @@ namespace UnityBotService.Twitter
                 var alreadyTweeted = await Twitter.IncludedInRecentTweetsAsync(release.Version);
                 if (!alreadyTweeted)
                 {
-                    var tweet = await Twitter.PublishTweetAsync($"A new version of Unity ({release.Version}) is Available.");
-                    Logger.LogInformation("I just tweeted a brand new version release.");
+                    var message = GetRandomReleaseMessage(release.Version);
+                    if(message.Length > 140)
+                    {
+                        throw new Exception("Tweet is longer than 40 characters.");
+                    }
+                    var tweet = await Twitter.PublishTweetAsync(message);
+                    Logger.LogInformation($"I just tweeted about Unity releasing version {release.Version}");
                 }
             }
             catch (Exception ex)
@@ -36,7 +41,8 @@ namespace UnityBotService.Twitter
         {
             try
             {
-                var tweetText = $"A day like today {yearDiff} years ago, Unity released version {release.Version} for Unity {release.UnityVersion}";
+                var yearsStr = yearDiff == 1 ? "year" : "years";
+                var tweetText = $"A day like today {yearDiff} {yearsStr} ago, Unity released version {release.Version} for Unity {release.UnityVersion}";
                 var alreadyTweeted = await Twitter.IncludedInRecentTweetsAsync(tweetText);
                 if (!alreadyTweeted)
                 {
@@ -60,5 +66,26 @@ namespace UnityBotService.Twitter
             }
             Logger.LogInformation($"Connected to twitter with user account: {user}");
         }
+
+        private string GetRandomReleaseMessage(string version)
+        {
+            var random = new Random();
+            var messageIndex = random.Next(0, Messages.Length - 1);
+            var msg = Messages[messageIndex];
+            var formattedMessage = string.Format(msg, version);
+            formattedMessage = $"{formattedMessage} #Unity3d";
+            return formattedMessage;
+        }
+
+        public static string[] Messages = new string[]
+        {
+            "The new Unity version {0} just came out of the oven! 👨‍🍳",
+            "Stop the press everyone! 📰 Unity has just released version v{0}",
+            "Hey, you might want to leave that for later and go get the new Unity release v{0}",
+            "Remember how hard you worked to get that Unity game working? Well guess what, v{0} just arrived 😀",
+            "Wow, yet another new Unity release. Go get v{0} now! 🚀",
+            "Unity has just released version v{0}, what are you waiting for? 🎈",
+            "Hey you wanna hear some good news?, Unity has just released version v{0}! ❤",
+        };
     }
 }

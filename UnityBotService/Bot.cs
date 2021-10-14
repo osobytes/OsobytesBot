@@ -31,7 +31,7 @@ namespace UnityBotService
             {
                 if (archive == null)
                 {
-                    throw new ArgumentNullException("archive", "Archive fetch returned null");
+                    throw new ArgumentNullException(nameof(archive), "Archive fetch returned null");
                 }
 
                 var latest = archive.GetLatestRelease();
