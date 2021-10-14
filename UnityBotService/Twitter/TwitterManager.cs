@@ -80,10 +80,10 @@ namespace UnityBotService.Twitter
         public static string[] Messages = new string[]
         {
             "The new {0} is fresh out of the oven! 👨‍🍳",
-            "Stop the press everyone! 📰 Unity {0} has just been released!",
+            "Stop the press everyone! 📰 {0} has just been released!",
             "Hey, you might want to leave that for later and go get the latest release {0}",
-            "Remember how hard you worked to get that Unity game working? Well guess what, {0} just arrived 😀",
-            "Wow, yet another new Unity release. Go get {0} now! 🚀",
+            "Remember how hard you worked to get that game running? Well guess what, {0} just arrived 😀",
+            "Wow, yet another new release. Go get {0} now! 🚀",
             "{0} has just released version, what are you waiting for? 🎈",
             "Hey you wanna hear some good news?, {0} has just been released! ❤",
         };
