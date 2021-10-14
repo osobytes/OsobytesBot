@@ -1,0 +1,30 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Build Docker container, Push to ACR and Deploy to Azure Container Instance.
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  pull-request:
+    branches: [ master, main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+    build-and-test:
+        runs-on: ubuntu-latest
+        steps:
+        # checkout the repo
+        - name: 'Checkout GitHub Action'
+          uses: actions/checkout@main
+        - name: Setup .NET
+          uses: actions/setup-dotnet@v1
+          with:
+            dotnet-version: 5.0.x
+        - name: Restore dotnet dependencies
+          run: dotnet restore
+        - name: Build dotnet projects
+          run: dotnet build
+        - name: Run unit tests
+          run: dotnet test

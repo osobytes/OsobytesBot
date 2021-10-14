@@ -1,0 +1,56 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "containerName": {
+            "value": "osobytesbot"
+        },
+        "location": {
+            "value": "westus"
+        },
+        "imageType": {
+            "value": "Private"
+        },
+        "imageName": {
+            "value": "{REGISTRY_URL}/unitybotservice:{IMAGE_VERSION}"
+        },
+        "osType": {
+            "value": "Linux"
+        },
+        "numberCpuCores": {
+            "value": "1"
+        },
+        "memory": {
+            "value": "1.5"
+        },
+        "restartPolicy": {
+            "value": "Always"
+        },
+        "imageRegistryLoginServer": {
+            "value": "{REGISTRY_URL}"
+        },
+        "imageUsername": {
+            "value": "{REGISTRY_USERNAME}"
+        },
+        "imagePassword": {
+            "value": "{REGISTRY_PASSWORD}"
+        },
+        "ipAddressType": {
+            "value": "Private"
+        },
+        "ports": {
+            "value": [
+                {
+                    "port": "80",
+                    "protocol": "TCP"
+                }
+            ]
+        },
+        "subnetName": {
+            "value": "containers"
+        },
+        "subnetAddressPrefix": {
+            "value": "192.168.1.0/24"
+        }
+    }
+}
