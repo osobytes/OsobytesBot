@@ -79,7 +79,7 @@ namespace UnityBotService.Twitter
 
         public static string[] Messages = new string[]
         {
-            "The new {0} just came out of the oven! 👨‍🍳",
+            "The new {0} is fresh out of the oven! 👨‍🍳",
             "Stop the press everyone! 📰 Unity {0} has just been released!",
             "Hey, you might want to leave that for later and go get the latest release {0}",
             "Remember how hard you worked to get that Unity game working? Well guess what, {0} just arrived 😀",
