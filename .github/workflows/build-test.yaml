@@ -5,7 +5,7 @@ name: Build Docker container, Push to ACR and Deploy to Azure Container Instance
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
-  pull-request:
+  pr:
     branches: [ master, main ]
 
   # Allows you to run this workflow manually from the Actions tab
