@@ -56,9 +56,9 @@ jobs:
             REG_UNAME: ${{ secrets.REGISTRY_USERNAME }}
             REG_PWD: ${{ secrets.REGISTRY_PASSWORD }}
             IMAGE_VERSION: ${{ github.sha }}
-            REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
+            REGISTRY_LOGIN_SERVER: ${{ secrets.REGISTRY_LOGIN_SERVER }}
           run: |
-            awk -v registryUsername="$REG_UNAME" -v registryPassword="$REG_PWD" -v imageVersion="$IMAGE_VERSION" -v registryUrl="$REGISTRY_URL" '{
+            awk -v registryUsername="$REG_UNAME" -v registryPassword="$REG_PWD" -v imageVersion="$IMAGE_VERSION" -v registryUrl="$REGISTRY_LOGIN_SERVER" '{
               sub(/{REGISTRY_USERNAME}/, registryUsername);
               sub(/{REGISTRY_PASSWORD}/, registryPassword);
               sub(/{IMAGE_VERSION}/, imageVersion);
@@ -72,7 +72,7 @@ jobs:
             TWITTER_ACCESSTOKEN: ${{ secrets.TWITTER_ACCESSTOKEN }}
             TWITTER_ACCESSTOKENSECRET: ${{ secrets.TWITTER_ACCESSTOKENSECRET }}
             TWITTER_BEARERTOKEN: ${{ secrets.TWITTER_BEARERTOKEN }}
-            RESOURCEGROUP_ID: ${{ secrets.RESOURCEGROUP_ID }}
+            RESOURCE_GROUP: ${{ secrets.RESOURCE_GROUP }}
             SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
           run: |
             encodedApiKey=$(echo $TWITTER_APIKEY | base64)
@@ -80,7 +80,7 @@ jobs:
             encodedAccessToken=$(echo $TWITTER_ACCESSTOKEN | base64)
             encodedAccessTokenSecret=$(echo $TWITTER_ACCESSTOKENSECRET | base64)
             encodedBearerToken=$(echo $TWITTER_BEARERTOKEN | base64)
-            awk -v encodedApiKey="$encodedApiKey" -v encodedApiSecret="$encodedApiSecret" -v encodedAccessToken="$encodedAccessToken" -v encodedAccessTokenSecret="$encodedAccessTokenSecret" -v encodedBearerToken="$encodedBearerToken" -v resourceGroupId="$RESOURCEGROUP_ID" -v subscriptionId="$SUBSCRIPTION_ID" '{
+            awk -v encodedApiKey="$encodedApiKey" -v encodedApiSecret="$encodedApiSecret" -v encodedAccessToken="$encodedAccessToken" -v encodedAccessTokenSecret="$encodedAccessTokenSecret" -v encodedBearerToken="$encodedBearerToken" -v resourceGroupId="$RESOURCE_GROUP" -v subscriptionId="$SUBSCRIPTION_ID" '{
               sub(/{TWITTER_APIKEY}/, encodedApiKey);
               sub(/{TWITTER_APISECRET}/, encodedApiSecret);
               sub(/{TWITTER_ACCESSTOKEN}/, encodedAccessToken);
