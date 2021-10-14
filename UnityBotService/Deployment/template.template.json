@@ -127,8 +127,8 @@
             "type": "Microsoft.Resources/deployments",
             "name": "OsobytesBotServiceDeployment",
             "apiVersion": "2018-05-01",
-            "resourceGroup": "{RESOURCEGROUP_ID}",
-            "SUBSCRIPTION_ID": "{SUBSCRIPTION_ID}",
+            "resourceGroup": "{RESOURCE_GROUP}",
+            "subscriptionId": "{SUBSCRIPTION_ID}",
             "properties": {
                 "mode": "Incremental",
                 "template": {
@@ -138,22 +138,22 @@
                     "variables": {},
                     "resources": [
                         {
-                            "name": "{RESOURCEGROUP}-vnet/containers",
-                            "id": "/subscriptions/623113bc-e59c-435d-a09b-f328e687674e/resourceGroups/{RESOURCEGROUP_ID}/providers/Microsoft.Network/virtualNetworks/{RESOURCEGROUP_ID}-vnet/subnets/containers",
+                            "name": "{RESOURCE_GROUP}-vnet/containers",
+                            "id": "/subscriptions/623113bc-e59c-435d-a09b-f328e687674e/resourceGroups/{RESOURCE_GROUP}/providers/Microsoft.Network/virtualNetworks/{RESOURCE_GROUP}-vnet/subnets/containers",
                             "properties": {
                                 "addressPrefix": "192.168.1.0/24",
                                 "networkSecurityGroup": {
-                                    "id": "/subscriptions/{SUBSCRIPTION_ID}/resourceGroups/{RESOURCEGROUP_ID}/providers/Microsoft.Network/networkSecurityGroups/unityupdatebot-nsg"
+                                    "id": "/subscriptions/{SUBSCRIPTION_ID}/resourceGroups/{RESOURCE_GROUP}/providers/Microsoft.Network/networkSecurityGroups/unityupdatebot-nsg"
                                 },
                                 "ipConfigurationProfiles": [
                                     {
-                                        "id": "/subscriptions/{SUBSCRIPTION_ID}/resourceGroups/{RESOURCEGROUP_ID}/providers/Microsoft.Network/networkProfiles/oobeso-networkProfile/containerNetworkInterfaceConfigurations/eth0/ipConfigurations/ipconfigprofile1"
+                                        "id": "/subscriptions/{SUBSCRIPTION_ID}/resourceGroups/{RESOURCE_GROUP}/providers/Microsoft.Network/networkProfiles/oobeso-networkProfile/containerNetworkInterfaceConfigurations/eth0/ipConfigurations/ipconfigprofile1"
                                     }
                                 ],
                                 "serviceAssociationLinks": [
                                     {
                                         "name": "acisal",
-                                        "id": "/subscriptions/{SUBSCRIPTION_ID}/resourceGroups/{RESOURCEGROUP_ID}/providers/Microsoft.Network/virtualNetworks/{RESOURCEGROUP_ID}-vnet/subnets/containers/serviceAssociationLinks/acisal",
+                                        "id": "/subscriptions/{SUBSCRIPTION_ID}/resourceGroups/{RESOURCE_GROUP}/providers/Microsoft.Network/virtualNetworks/{RESOURCE_GROUP}-vnet/subnets/containers/serviceAssociationLinks/acisal",
                                         "etag": "W/\"bd7062eb-277f-4882-9e5b-5e60dbe1b7e2\"",
                                         "type": "Microsoft.Network/virtualNetworks/subnets/serviceAssociationLinks",
                                         "properties": {
@@ -242,7 +242,7 @@
         "networkProfileName": "osobytesbot-networkProfile",
         "interfaceConfigName": "eth0",
         "interfaceIpConfig": "ipconfigprofile1",
-        "vnetId": "/subscriptions/{SUBSCRIPTION_ID}/resourceGroups/{RESOURCEGROUP_ID}/providers/Microsoft.Network/virtualNetworks/{RESOURCEGROUP_ID}-vnet",
-        "subnetId": "/subscriptions/{SUBSCRIPTION_ID}/resourceGroups/{RESOURCEGROUP_ID}/providers/Microsoft.Network/virtualNetworks/{RESOURCEGROUP_ID}-vnet/subnets/containers"
+        "vnetId": "/subscriptions/{SUBSCRIPTION_ID}/resourceGroups/{RESOURCE_GROUP}/providers/Microsoft.Network/virtualNetworks/{RESOURCE_GROUP}-vnet",
+        "subnetId": "/subscriptions/{SUBSCRIPTION_ID}/resourceGroups/{RESOURCE_GROUP}/providers/Microsoft.Network/virtualNetworks/{RESOURCE_GROUP}-vnet/subnets/containers"
     }
 }
