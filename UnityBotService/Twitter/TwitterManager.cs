@@ -42,7 +42,8 @@ namespace UnityBotService.Twitter
             try
             {
                 var yearsStr = yearDiff == 1 ? "year" : "years";
-                var tweetText = $"A day like today {yearDiff} {yearsStr} ago, Unity released version {release.Version} for Unity {release.UnityVersion}";
+                var unityV = release.UnityVersion.Replace("version-", "");
+                var tweetText = $"A day like today {yearDiff} {yearsStr} ago, version {release.Version} was released for Unity {unityV}";
                 var alreadyTweeted = await Twitter.IncludedInRecentTweetsAsync(tweetText);
                 if (!alreadyTweeted)
                 {
