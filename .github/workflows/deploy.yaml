@@ -80,13 +80,13 @@ jobs:
             encodedAccessToken=$(echo $TWITTER_ACCESSTOKEN | base64)
             encodedAccessTokenSecret=$(echo $TWITTER_ACCESSTOKENSECRET | base64)
             encodedBearerToken=$(echo $TWITTER_BEARERTOKEN | base64)
-            awk -v encodedApiKey="$encodedApiKey" -v encodedApiSecret="$encodedApiSecret" -v encodedAccessToken="$encodedAccessToken" -v encodedAccessTokenSecret="$encodedAccessTokenSecret" -v encodedBearerToken="$encodedBearerToken" -v resourceGroupId="$RESOURCE_GROUP" -v subscriptionId="$SUBSCRIPTION_ID" '{
+            awk -v encodedApiKey="$encodedApiKey" -v encodedApiSecret="$encodedApiSecret" -v encodedAccessToken="$encodedAccessToken" -v encodedAccessTokenSecret="$encodedAccessTokenSecret" -v encodedBearerToken="$encodedBearerToken" -v resourceGroup="$RESOURCE_GROUP" -v subscriptionId="$SUBSCRIPTION_ID" '{
               sub(/{TWITTER_APIKEY}/, encodedApiKey);
               sub(/{TWITTER_APISECRET}/, encodedApiSecret);
               sub(/{TWITTER_ACCESSTOKEN}/, encodedAccessToken);
               sub(/{TWITTER_ACCESSTOKENSECRET}/, encodedAccessTokenSecret);
               sub(/{TWITTER_BEARERTOKEN}/, encodedBearerToken);
-              sub(/{RESOURCEGROUP_ID}/, resourceGroupId);
+              sub(/{RESOURCE_GROUP}/, resourceGroup);
               sub(/{SUBSCRIPTION_ID}/, subscriptionId);
               print;
             }' template.template.json > $RUNNER_TEMP/template.json
