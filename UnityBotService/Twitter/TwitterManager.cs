@@ -79,13 +79,13 @@ namespace UnityBotService.Twitter
 
         public static string[] Messages = new string[]
         {
-            "The new Unity version {0} just came out of the oven! 👨‍🍳",
-            "Stop the press everyone! 📰 Unity has just released version v{0}",
-            "Hey, you might want to leave that for later and go get the new Unity release v{0}",
-            "Remember how hard you worked to get that Unity game working? Well guess what, v{0} just arrived 😀",
-            "Wow, yet another new Unity release. Go get v{0} now! 🚀",
-            "Unity has just released version v{0}, what are you waiting for? 🎈",
-            "Hey you wanna hear some good news?, Unity has just released version v{0}! ❤",
+            "The new {0} just came out of the oven! 👨‍🍳",
+            "Stop the press everyone! 📰 Unity {0} has just been released!",
+            "Hey, you might want to leave that for later and go get the latest release {0}",
+            "Remember how hard you worked to get that Unity game working? Well guess what, {0} just arrived 😀",
+            "Wow, yet another new Unity release. Go get {0} now! 🚀",
+            "{0} has just released version, what are you waiting for? 🎈",
+            "Hey you wanna hear some good news?, {0} has just been released! ❤",
         };
     }
 }
