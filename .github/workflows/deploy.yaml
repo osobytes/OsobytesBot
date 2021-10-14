@@ -6,7 +6,7 @@ name: Build Docker container, Push to ACR and Deploy to Azure Container Instance
 on:
   # Triggers the workflow on push events but only for the master/main branch
   push:
-    branches: [ master, main ]
+    branches: [ main ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
