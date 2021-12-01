@@ -188,7 +188,7 @@
                 ]
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnet'), parameters('subnetName'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnet'))]"
             ]
         },
         {
