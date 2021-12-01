@@ -27,10 +27,6 @@
                 "description": "Subnet name"
             }
         },
-        "networkProfileName": {
-            "type": "string",
-            "defaultValue": "aci-networkProfile"
-        },
         "restartPolicy": {
             "type": "string",
             "defaultValue": "Always",
@@ -75,8 +71,8 @@
             }
         },
         "memoryInGb": {
-            "type": "int",
-            "defaultValue": 1.5,
+            "type": "string",
+            "defaultValue": "1.5",
             "metadata": {
                 "description": "The amount of memory to allocate to the container in gigabytes."
             }
@@ -116,24 +112,24 @@
             "type": "secureString"
         },
         "twitterApiKey": {
-            "type": "string"
+            "type": "secureString"
         },
         "twitterApiSecret": {
-            "type": "string"
+            "type": "secureString"
         },
         "twitterAccessToken": {
-            "type": "string"
+            "type": "secureString"
         },
         "twitterAccessTokenSecret": {
-            "type": "string"
+            "type": "secureString"
         },
         "twitterBearerToken": {
-            "type": "string"
+            "type": "secureString"
         }
     },
     "functions": [],
     "variables": {
-        "networkProfileName": "[parameters('networkProfileName')]",
+        "networkProfileName": "aci-networkProfile",
         "interfaceConfigName": "eth0",
         "interfaceIpConfig": "ipconfigprofile1"
     },
@@ -212,7 +208,7 @@
                             "resources": {
                                 "requests": {
                                     "cpu": "[parameters('cpuCores')]",
-                                    "memoryInGB": "[parameters('memoryInGb')]"
+                                    "memoryInGB": "[float(parameters('memoryInGb'))]"
                                 }
                             },
                             "ports": "[parameters('ports')]",
