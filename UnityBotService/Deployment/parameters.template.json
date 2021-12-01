@@ -38,6 +38,9 @@
         "ipAddressType": {
             "value": "Private"
         },
+        "vnet": {
+            "value": "unityupdatebot-vnet"
+        },
         "ports": {
             "value": [
                 {

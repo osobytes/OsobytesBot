@@ -51,6 +51,9 @@
         "ipAddressType": {
             "type": "string"
         },
+        "vnet": {
+            "type": "string"
+        },
         "ports": {
             "type": "array"
         },
@@ -125,7 +128,7 @@
         },
         {
             "type": "Microsoft.Resources/deployments",
-            "name": "OsobytesBotServiceDeployment",
+            "name": "UnityUpdateBotServiceDeployment",
             "apiVersion": "2018-05-01",
             "resourceGroup": "{RESOURCE_GROUP}",
             "subscriptionId": "{SUBSCRIPTION_ID}",
@@ -138,8 +141,8 @@
                     "variables": {},
                     "resources": [
                         {
-                            "name": "osobytes-general-vnet/containers",
-                            "id": "/subscriptions/{SUBSCRIPTION_ID}/resourceGroups/{RESOURCE_GROUP}/providers/Microsoft.Network/virtualNetworks/osobytes-general-vnet/subnets/containers",
+                            "name": "[parameters('vnet')]/[parameters('subnetName')]",
+                            "id": "/subscriptions/{SUBSCRIPTION_ID}/resourceGroups/{RESOURCE_GROUP}/providers/Microsoft.Network/virtualNetworks/[parameters('vnet')]/subnets/[parameters('subnetName')]",
                             "properties": {
                                 "addressPrefix": "192.168.1.0/24",
                                 "networkSecurityGroup": {
@@ -153,7 +156,7 @@
                                 "serviceAssociationLinks": [
                                     {
                                         "name": "acisal",
-                                        "id": "/subscriptions/{SUBSCRIPTION_ID}/resourceGroups/{RESOURCE_GROUP}/providers/Microsoft.Network/virtualNetworks/osobytes-general-vnet/subnets/containers/serviceAssociationLinks/acisal",
+                                        "id": "/subscriptions/{SUBSCRIPTION_ID}/resourceGroups/{RESOURCE_GROUP}/providers/Microsoft.Network/virtualNetworks/[parameters('vnet')]/subnets/containers/serviceAssociationLinks/acisal",
                                         "etag": "W/\"bd7062eb-277f-4882-9e5b-5e60dbe1b7e2\"",
                                         "type": "Microsoft.Network/virtualNetworks/subnets/serviceAssociationLinks",
                                         "properties": {
@@ -215,7 +218,7 @@
             "apiVersion": "2019-11-01",
             "location": "[parameters('location')]",
             "dependsOn": [
-                "[concat('Microsoft.Resources/deployments/', 'OsobytesBotServiceDeployment')]"
+                "[concat('Microsoft.Resources/deployments/', 'UnityUpdateBotServiceDeployment')]"
             ],
             "properties": {
                 "containerNetworkInterfaceConfigurations": [
@@ -239,10 +242,10 @@
         }
     ],
     "variables": {
-        "networkProfileName": "osobytesbot-networkProfile",
+        "networkProfileName": "unityupdatebot-networkProfile",
         "interfaceConfigName": "eth0",
         "interfaceIpConfig": "ipconfigprofile1",
-        "vnetId": "/subscriptions/{SUBSCRIPTION_ID}/resourceGroups/{RESOURCE_GROUP}/providers/Microsoft.Network/virtualNetworks/osobytes-general-vnet",
-        "subnetId": "/subscriptions/{SUBSCRIPTION_ID}/resourceGroups/{RESOURCE_GROUP}/providers/Microsoft.Network/virtualNetworks/osobytes-general-vnet/subnets/containers"
+        "vnetId": "/subscriptions/{SUBSCRIPTION_ID}/resourceGroups/{RESOURCE_GROUP}/providers/Microsoft.Network/virtualNetworks/[parameters('vnet')]",
+        "subnetId": "/subscriptions/{SUBSCRIPTION_ID}/resourceGroups/{RESOURCE_GROUP}/providers/Microsoft.Network/virtualNetworks/[parameters('vnet')]/subnets/[parameters('subnetName')]"
     }
 }
