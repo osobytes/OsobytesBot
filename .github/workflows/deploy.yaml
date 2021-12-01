@@ -51,45 +51,43 @@ jobs:
         # checkout the repo
         - name: 'Checkout GitHub Action'
           uses: actions/checkout@main
-        - name: Create parameters file
+        - name: Create parameter file from template
           env:
             REG_UNAME: ${{ secrets.REGISTRY_USERNAME }}
             REG_PWD: ${{ secrets.REGISTRY_PASSWORD }}
             IMAGE_VERSION: ${{ github.sha }}
             REGISTRY_LOGIN_SERVER: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-          run: |
-            awk -v registryUsername="$REG_UNAME" -v registryPassword="$REG_PWD" -v imageVersion="$IMAGE_VERSION" -v registryUrl="$REGISTRY_LOGIN_SERVER" '{
-              sub(/{REGISTRY_USERNAME}/, registryUsername);
-              sub(/{REGISTRY_PASSWORD}/, registryPassword);
-              sub(/{IMAGE_VERSION}/, imageVersion);
-              sub(/{REGISTRY_URL}/, registryUrl);
-              print;
-            }' parameters.template.json > $RUNNER_TEMP/parameters.json
-        - name: Create template file
-          env:
             TWITTER_APIKEY: ${{ secrets.TWITTER_APIKEY }}
             TWITTER_APISECRET: ${{ secrets.TWITTER_APISECRET }}
             TWITTER_ACCESSTOKEN: ${{ secrets.TWITTER_ACCESSTOKEN }}
             TWITTER_ACCESSTOKENSECRET: ${{ secrets.TWITTER_ACCESSTOKENSECRET }}
             TWITTER_BEARERTOKEN: ${{ secrets.TWITTER_BEARERTOKEN }}
-            RESOURCE_GROUP: ${{ secrets.RESOURCE_GROUP }}
-            SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
           run: |
             encodedApiKey=$(echo $TWITTER_APIKEY | base64)
             encodedApiSecret=$(echo $TWITTER_APISECRET | base64)
             encodedAccessToken=$(echo $TWITTER_ACCESSTOKEN | base64)
             encodedAccessTokenSecret=$(echo $TWITTER_ACCESSTOKENSECRET | base64)
             encodedBearerToken=$(echo $TWITTER_BEARERTOKEN | base64)
-            awk -v encodedApiKey="$encodedApiKey" -v encodedApiSecret="$encodedApiSecret" -v encodedAccessToken="$encodedAccessToken" -v encodedAccessTokenSecret="$encodedAccessTokenSecret" -v encodedBearerToken="$encodedBearerToken" -v resourceGroup="$RESOURCE_GROUP" -v subscriptionId="$SUBSCRIPTION_ID" '{
+            awk -v registryUsername="$REG_UNAME" \
+            -v registryPassword="$REG_PWD" \
+            -v imageVersion="$IMAGE_VERSION" \
+            -v registryUrl="$REGISTRY_LOGIN_SERVER" \
+            -v encodedApiKey="$encodedApiKey" \
+            -v encodedApiSecret="$encodedApiSecret" \
+            -v encodedAccessToken="$encodedAccessToken" \
+            -v encodedAccessTokenSecret="$encodedAccessTokenSecret" \
+            '{
+              sub(/{REGISTRY_USERNAME}/, registryUsername);
+              sub(/{REGISTRY_PASSWORD}/, registryPassword);
+              sub(/{IMAGE_VERSION}/, imageVersion);
+              sub(/{REGISTRY_URL}/, registryUrl);
               sub(/{TWITTER_APIKEY}/, encodedApiKey);
               sub(/{TWITTER_APISECRET}/, encodedApiSecret);
               sub(/{TWITTER_ACCESSTOKEN}/, encodedAccessToken);
               sub(/{TWITTER_ACCESSTOKENSECRET}/, encodedAccessTokenSecret);
               sub(/{TWITTER_BEARERTOKEN}/, encodedBearerToken);
-              sub(/{RESOURCE_GROUP}/, resourceGroup);
-              sub(/{SUBSCRIPTION_ID}/, subscriptionId);
               print;
-            }' template.template.json > $RUNNER_TEMP/template.json
+            }' parameters.template.json > $RUNNER_TEMP/parameters.json
         - name: 'Login via Azure CLI'
           uses: azure/login@v1
           with:
@@ -98,4 +96,4 @@ jobs:
           env:
             RESOURCE_GROUP: ${{ secrets.RESOURCE_GROUP }}
           run: |
-            az deployment group create -g $RESOURCE_GROUP -f ${{ runner.temp }}/template.json -p ${{ runner.temp }}/parameters.json
+            az deployment group create -g $RESOURCE_GROUP -f containerdeploy.json -p ${{ runner.temp }}/parameters.json

@@ -1,0 +1,262 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vnet": {
+            "type": "string",
+            "defaultValue": "container-vnet"
+        },
+        "vnetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.0.0/16",
+            "metadata": {
+                "description": "Address prefix"
+            }
+        },
+        "subnetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.0.0/24",
+            "metadata": {
+                "description": "Subnet prefix"
+            }
+        },
+        "subnetName": {
+            "type": "string",
+            "defaultValue": "containers",
+            "metadata": {
+                "description": "Subnet name"
+            }
+        },
+        "networkProfileName": {
+            "type": "string",
+            "defaultValue": "aci-networkProfile"
+        },
+        "restartPolicy": {
+            "type": "string",
+            "defaultValue": "Always",
+            "allowedValues": [
+                "OnFailure",
+                "Always",
+                "Never"
+            ]
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Location for all resources."
+            }
+        },
+        "containerGroupName": {
+            "type": "string",
+            "defaultValue": "container-group",
+            "metadata": {
+                "description": "Container group name"
+            }
+        },
+        "containerName": {
+            "type": "string",
+            "defaultValue": "container-instance",
+            "metadata": {
+                "description": "Container name"
+            }
+        },
+        "image": {
+            "type": "string",
+            "metadata": {
+                "description": "Container image to deploy. Should be of the form accountName/imagename:tag for images stored in Docker Hub or a fully qualified URI for a private registry like the Azure Container Registry."
+            }
+        },
+        "cpuCores": {
+            "type": "int",
+            "defaultValue": 1,
+            "metadata": {
+                "description": "The number of CPU cores to allocate to the container. Must be an integer."
+            }
+        },
+        "memoryInGb": {
+            "type": "int",
+            "defaultValue": 1.5,
+            "metadata": {
+                "description": "The amount of memory to allocate to the container in gigabytes."
+            }
+        },
+        "ipAddressType": {
+            "type": "string",
+            "defaultValue": "Private"
+        },
+        "ports": {
+            "type": "array",
+            "defaultValue": [
+                {
+                    "port": "80",
+                    "protocol": "TCP"
+                }
+            ]
+        },
+        "osType": {
+            "type": "string",
+            "defaultValue": "Linux",
+            "allowedValues": [
+                "Linux",
+                "Windows"
+            ]
+        },
+        "imageType": {
+            "type": "string",
+            "defaultValue": "Private"
+        },
+        "imageRegistryLoginServer": {
+            "type": "string"
+        },
+        "imageUsername": {
+            "type": "string"
+        },
+        "imagePassword": {
+            "type": "secureString"
+        },
+        "twitterApiKey": {
+            "type": "string"
+        },
+        "twitterApiSecret": {
+            "type": "string"
+        },
+        "twitterAccessToken": {
+            "type": "string"
+        },
+        "twitterAccessTokenSecret": {
+            "type": "string"
+        },
+        "twitterBearerToken": {
+            "type": "string"
+        }
+    },
+    "functions": [],
+    "variables": {
+        "networkProfileName": "[parameters('networkProfileName')]",
+        "interfaceConfigName": "eth0",
+        "interfaceIpConfig": "ipconfigprofile1"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2020-11-01",
+            "name": "[parameters('vnet')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('vnetAddressPrefix')]"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2020-11-01",
+            "name": "[format('{0}/{1}', parameters('vnet'), parameters('subnetName'))]",
+            "properties": {
+                "addressPrefix": "[parameters('subnetAddressPrefix')]",
+                "delegations": [
+                    {
+                        "name": "DelegationService",
+                        "properties": {
+                            "serviceName": "Microsoft.ContainerInstance/containerGroups"
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnet'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/networkProfiles",
+            "apiVersion": "2020-11-01",
+            "name": "[variables('networkProfileName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "containerNetworkInterfaceConfigurations": [
+                    {
+                        "name": "[variables('interfaceConfigName')]",
+                        "properties": {
+                            "ipConfigurations": [
+                                {
+                                    "name": "[variables('interfaceIpConfig')]",
+                                    "properties": {
+                                        "subnet": {
+                                            "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnet'), parameters('subnetName'))]"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnet'), parameters('subnetName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.ContainerInstance/containerGroups",
+            "apiVersion": "2019-12-01",
+            "name": "[parameters('containerGroupName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "containers": [
+                    {
+                        "name": "[parameters('containerName')]",
+                        "properties": {
+                            "image": "[parameters('image')]",
+                            "resources": {
+                                "requests": {
+                                    "cpu": "[parameters('cpuCores')]",
+                                    "memoryInGB": "[parameters('memoryInGb')]"
+                                }
+                            },
+                            "ports": "[parameters('ports')]",
+                            "volumeMounts": [
+                                {
+                                  "name": "secretsvol",
+                                  "mountPath": "/mnt/secrets"
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "restartPolicy": "[parameters('restartPolicy')]",
+                "osType": "[parameters('osType')]",
+                "networkProfile": {
+                    "id": "[resourceId('Microsoft.Network/networkProfiles', variables('networkProfileName'))]"
+                },
+                "imageRegistryCredentials": [
+                    {
+                        "server": "[parameters('imageRegistryLoginServer')]",
+                        "username": "[parameters('imageUsername')]",
+                        "password": "[parameters('imagePassword')]"
+                    }
+                ],
+                "ipAddress": {
+                    "type": "[parameters('ipAddressType')]",
+                    "ports": "[parameters('ports')]"
+                },
+                "volumes": [
+                    {
+                      "name": "secretsvol",
+                      "secret": {
+                        "unityupdatebot-twitter-apikey": "[parameters('twitterApiKey')]",
+                        "unityupdatebot-twitter-apisecret": "[parameters('twitterApiSecret')]",
+                        "unityupdatebot-twitter-accesstoken": "[parameters('twitterAccessToken')]",
+                        "unityupdatebot-twitter-accesstokensecret": "[parameters('twitterAccessTokenSecret')]",
+                        "unityupdatebot-twitter-bearertoken": "[parameters('twitterBearerToken')]"
+                      }
+                    }
+                  ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkProfiles', variables('networkProfileName'))]"
+            ]
+        }
+    ]
+}

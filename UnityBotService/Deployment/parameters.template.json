@@ -2,29 +2,14 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "containerGroupName": {
+            "value": "unityupdatebot-containergroup"
+        },
         "containerName": {
-            "value": "osobytesbot"
+            "value": "unityupdatebot"
         },
-        "location": {
-            "value": "westus"
-        },
-        "imageType": {
-            "value": "Private"
-        },
-        "imageName": {
+        "image": {
             "value": "{REGISTRY_URL}/unitybotservice:{IMAGE_VERSION}"
-        },
-        "osType": {
-            "value": "Linux"
-        },
-        "numberCpuCores": {
-            "value": "1"
-        },
-        "memory": {
-            "value": "1.5"
-        },
-        "restartPolicy": {
-            "value": "Always"
         },
         "imageRegistryLoginServer": {
             "value": "{REGISTRY_URL}"
@@ -35,25 +20,20 @@
         "imagePassword": {
             "value": "{REGISTRY_PASSWORD}"
         },
-        "ipAddressType": {
-            "value": "Private"
+        "twitterApiKey": {
+            "value": "{TWITTER_APIKEY}"
         },
-        "vnet": {
-            "value": "unityupdatebot-vnet"
+        "twitterApiSecret": {
+            "value": "{TWITTER_APISECRET}"
         },
-        "ports": {
-            "value": [
-                {
-                    "port": "80",
-                    "protocol": "TCP"
-                }
-            ]
+        "twitterAccessToken": {
+            "value": "{TWITTER_ACCESSTOKEN}"
         },
-        "subnetName": {
-            "value": "containers"
+        "twitterAccessTokenSecret": {
+            "value": "{TWITTER_ACCESSTOKENSECRET}"
         },
-        "subnetAddressPrefix": {
-            "value": "192.168.1.0/24"
+        "twitterBearerToken": {
+            "value": "{TWITTER_BEARERTOKEN}"
         }
     }
 }
