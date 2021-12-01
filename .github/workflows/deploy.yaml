@@ -76,6 +76,7 @@ jobs:
             -v encodedApiSecret="$encodedApiSecret" \
             -v encodedAccessToken="$encodedAccessToken" \
             -v encodedAccessTokenSecret="$encodedAccessTokenSecret" \
+            -v encodedBearerToken="$encodedBearerToken" \
             '{
               sub(/{REGISTRY_USERNAME}/, registryUsername);
               sub(/{REGISTRY_PASSWORD}/, registryPassword);
